@@ -4,6 +4,7 @@ using FutureProjects.Application.Abstractions.IServices;
 using FutureProjects.Application.Mappers;
 using FutureProjects.Domain.Entities.DTOs;
 using FutureProjects.Domain.Entities.Models;
+using FutureProjects.Domain.Entities.ViewModels;
 using Moq;
 using System.Linq.Expressions;
 
@@ -202,13 +203,6 @@ namespace FutureProjects.Application.Tests.Services.UserServices
         {
             // Arrange
             int userIdToDelete = 5;
-
-            //        _userservice.Setup(x => x.Update(Id, user))
-            //.ReturnsAsync(result);
-            //var controller = new UsersController(_userservice.Object);
-            //var natija = await controller.UpdateUser(Id, user);
-            //Assert.True(CompareModels(natija, result));
-
             _userservice.Setup(x => x.Delete(x => x.Id == userIdToDelete)).ReturnsAsync(true);
             var controller = new UsersController(_userservice.Object);
 
@@ -221,7 +215,44 @@ namespace FutureProjects.Application.Tests.Services.UserServices
         }
 
 
+        // GetAll method test
+        [Fact]
+        public async Task Get_All_Users_TestAsync()
+        {
+            // Arrange
+            var usersList = new List<UserViewModel>
+            {
+                new UserViewModel()
+                {
+                    Name = "Test Product 1",
+                    Email = "komilov@gmail.com",
+                    Role = "Admin"
+                },
+                new UserViewModel()
+                {
+                    Name = "Test Product 2",
+                    Email = "komilov@gmail.com",
+                    Role = "Admin"
+                },
+                new UserViewModel()
+                {
+                    Name = "Test Product 3",
+                    Email = "komilov@gmail.com",
+                    Role = "Admin"
+                }
+            };
+            _userservice.Setup(x => x.GetAll()).ReturnsAsync(usersList);
 
+            var controller = new UsersController(_userservice.Object);
+
+            // Act
+            var result = await controller.GetAll();
+
+            // Assert 
+            Assert.NotNull(result);
+            Assert.Equal(usersList, result);
+
+        }
 
 
         // Get User Test

@@ -72,5 +72,13 @@ namespace FutureProjects.API.Controllers
             return result;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<UserViewModel>> GetAll()
+        {
+            var result = await _userService.GetAll();
+
+            return result;
+        }
+
     }
 }
