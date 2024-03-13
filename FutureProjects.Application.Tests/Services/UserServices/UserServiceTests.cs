@@ -4,9 +4,8 @@ using FutureProjects.Application.Abstractions.IServices;
 using FutureProjects.Application.Mappers;
 using FutureProjects.Domain.Entities.DTOs;
 using FutureProjects.Domain.Entities.Models;
-using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Linq.Expressions;
 
 namespace FutureProjects.Application.Tests.Services.UserServices
 {
@@ -197,7 +196,34 @@ namespace FutureProjects.Application.Tests.Services.UserServices
             return false;
         }
 
-        
+
+        [Fact]
+        public async Task Delete_User_Test()
+        {
+            // Arrange
+            int userIdToDelete = 5;
+
+            //        _userservice.Setup(x => x.Update(Id, user))
+            //.ReturnsAsync(result);
+            //var controller = new UsersController(_userservice.Object);
+            //var natija = await controller.UpdateUser(Id, user);
+            //Assert.True(CompareModels(natija, result));
+
+            _userservice.Setup(x => x.Delete(x => x.Id == userIdToDelete)).ReturnsAsync(true);
+            var controller = new UsersController(_userservice.Object);
+
+            // Act
+            var result = await controller.DeleteUser(userIdToDelete);
+
+            // Assert
+            Assert.True(result); 
+
+        }
+
+
+
+
+
         // Get User Test
         [Fact]
         public async Task Get_User_ById_TestAsync()
